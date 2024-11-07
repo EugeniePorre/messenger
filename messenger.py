@@ -1,26 +1,27 @@
 from datetime import datetime
+import json
 
-server = {
-    'users': [
-        {'id': 1, 'name': 'Alice'},
-        {'id': 2, 'name': 'Bob'}
-    ],
-    'channels': [
-        {'id': 1, 'name': 'Town square', 'member_ids': [1, 2]}
-    ],
-    'messages': [
-        {
-            'id': 1,
-            'reception_date': datetime.now(),
-            'sender_id': 1,
-            'channel': 1,
-            'content': 'Hi'
-        }
-    ]
-}
+# server = {
+#     'users': [
+#         {'id': 1, 'name': 'Alice'},
+#         {'id': 2, 'name': 'Bob'}
+#     ],
+#     'channels': [
+#         {'id': 1, 'name': 'Town square', 'member_ids': [1, 2]}
+#     ],
+#     'messages': [
+#         {
+#             'id': 1,
+#             'reception_date': datetime.now(),
+#             'sender_id': 1,
+#             'channel': 1,
+#             'content': 'Hi'
+#         }
+#     ]
+# }
 
-CHANNELS = [c['id'] for c in server['channels']]
-print(CHANNELS)
+fichier = open('server.json')
+server = json.load(fichier)
 
 def id_to_name(id):
     L = []
@@ -62,6 +63,7 @@ def see_channels():
     choix = input('Select an option: ')
     if choix == 'Yes':
         group = input('Enter channel id: ')
+        CHANNELS = [c['id'] for c in server['channels']]
         if int(group) not in CHANNELS :
             print('Unknown option:', group)
         M = [m for m in server['messages'] if m['channel'] == int(group)]
@@ -89,6 +91,7 @@ def add_users_from_list(L):
     for i in range(nb):
         NewUser = {'id': id + i, 'name': NU[i]}
         server['users'].append(NewUser)
+    save()
     print('User(s) added !')
     see_users()
 
@@ -106,7 +109,12 @@ def add_channel():
     channel_id = max([channel['id'] for channel in server['channels']]) + 1
     new_channel = {'id': channel_id, 'name': name, 'member_ids': Lusers}
     server['channels'].append(new_channel)
+    save()
     see_channels()
+
+def save():
+    with open('server.json','w') as file :
+        json.dump(server,file)
 
 def messenger():
     print('=== Messenger ===')
