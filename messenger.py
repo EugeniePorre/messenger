@@ -112,13 +112,28 @@ def add_channel():
     save()
     see_channels()
 
+
+### 
+# Il faut aussi supprimer les messages du user
+# Il faut aussi supprimer le user des groupes
+###
+# def delete_users():
+#     N = [n.strip() for n in input('Enter users you wish to remove from the server -separated by commas:').split(',')]
+#     for n in N:
+#         if n not in [u['name'] for u in server['users']]:
+#             print("ERREUR : ",n,"is not an user")
+#         else :
+
+
+
+
 def save():
     with open('server.json','w') as file :
         json.dump(server,file)
 
 def messenger():
     print('=== Messenger ===')
-    print('x. Leave\nA. See users\nB. See channels\nC. Add users\nD. Add channel')
+    print('x. Leave\nA. See users\nB. See channels\nC. Add users\nD. Add channel\nE. Delete users')
     choice = input('Select an option: ')
     if choice == 'x':
         leave()
@@ -130,6 +145,8 @@ def messenger():
         add_users()
     elif choice == 'D':
         add_channel()
+    elif choice == 'E':
+        delete_users()
     else:
         print('Unknown option:', choice)
 
