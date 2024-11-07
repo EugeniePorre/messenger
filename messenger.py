@@ -33,6 +33,16 @@ def id_to_name(id):
         print("ERREUR : Plusieurs utilisateurs correspondent à l'identifiant",id,"demandé")
         return L
 
+def name_to_id(name):
+    L = []
+    for i in server['users']:
+        if u['name'] == name :
+            L.append(u['id'])
+    if len(L) == 1 :
+        return L[0]
+    else :
+        print("ERREUR : Plusieurs id correspondent au nom",name,'demandé')
+        return L
 
 def leave():
     print('Bye!')
@@ -69,7 +79,11 @@ def see_channels():
 def add_users():
     print("Who would you like to add ?")
     new_users = input('Enter names separated by commas: ')
-    NU = [nu.strip() for nu in new_users.split(',')]
+    L = new_users.split(',')
+    add_users_from_list(L)
+
+def add_users_from_list(L):
+    NU = [nu.strip() for nu in L]
     nb = len(NU)
     id = max([u['id'] for u in server['users']]) + 1
     for i in range(nb):
@@ -78,9 +92,23 @@ def add_users():
     print('User(s) added !')
     see_users()
 
+def add_channel():
+    print("Which channel would you like to add ?")
+    name = input('Enter channel name: ').strip()
+    users = [u.strip() for u in input("Enter channel users's names -separated by commas:").split(',')]
+    n = len(users)
+    L = []
+    for u in users :
+        if u not in [v['name'] for v in server['users']] :
+            L.append(u)
+    add_users_from_list(L)
+    Lusers = [name_to_id(name) for name in users]
+    channel_id = max([channel['id'] for channel in server['channels']]) + 1
+    new_channel = {'id': channel_id, 'name': name, 'member_ids': Lusers}
+
 def messenger():
     print('=== Messenger ===')
-    print('x. Leave\nA. See users\nB. See channels\nC. Add users')
+    print('x. Leave\nA. See users\nB. See channels\nC. Add users\nD. Add channel')
     choice = input('Select an option: ')
     if choice == 'x':
         leave()
@@ -90,6 +118,8 @@ def messenger():
         see_channels()
     elif choice == 'C':
         add_users()
+    elif choice == 'D':
+        add_channel()
     else:
         print('Unknown option:', choice)
 
