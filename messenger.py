@@ -66,6 +66,18 @@ def see_channels():
     else :
         print('Unknown option:', choix)
 
+def add_users():
+    print("Who would you like to add ?")
+    new_users = input('Enter names separated by commas: ')
+    NU = [nu.strip() for nu in new_users.split(',')]
+    nb = len(NU)
+    id = max([u['id'] for u in server['users']]) + 1
+    for i in range(nb):
+        NewUser = {'id': id + i, 'name': NU[i]}
+        server['users'].append(NewUser)
+    print('User(s) added !')
+    see_users()
+
 def messenger():
     print('=== Messenger ===')
     print('x. Leave\nA. See users\nB. See channels\nC. Add users')
@@ -77,7 +89,7 @@ def messenger():
     elif choice == 'B':
         see_channels()
     elif choice == 'C':
-        print("Who would you like to add ?")
+        add_users()
     else:
         print('Unknown option:', choice)
 
