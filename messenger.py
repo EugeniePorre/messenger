@@ -35,7 +35,7 @@ def id_to_name(id):
 
 def name_to_id(name):
     L = []
-    for i in server['users']:
+    for u in server['users']:
         if u['name'] == name :
             L.append(u['id'])
     if len(L) == 1 :
@@ -105,6 +105,8 @@ def add_channel():
     Lusers = [name_to_id(name) for name in users]
     channel_id = max([channel['id'] for channel in server['channels']]) + 1
     new_channel = {'id': channel_id, 'name': name, 'member_ids': Lusers}
+    server['channels'].append(new_channel)
+    see_channels()
 
 def messenger():
     print('=== Messenger ===')
