@@ -84,13 +84,12 @@ def add_users():
     L = new_users.split(',')
     add_users_from_list(L)
 
-def add_users_from_list(L):
-    NU = [nu.strip() for nu in L]
-    nb = len(NU)
-    id = max([u['id'] for u in server['users']]) + 1
-    for i in range(nb):
-        NewUser = {'id': id + i, 'name': NU[i]}
-        server['users'].append(NewUser)
+def add_users_from_list(new_raw_usernames):
+    new_usernames = [new_raw_username.strip() for new_raw_username in new_raw_usernames]
+    first_unused_id = max(user['id'] for user in server['users']) + 1
+    for i, new_username in enumerate(new_usernames):
+        new_user = {'id': first_unused_id + i, 'name': new_username}
+        server['users'].append(new_user)
     save()
     print('User(s) added !')
     see_users()
