@@ -31,6 +31,7 @@ class User :
         self.id = id
         self.name = name
 
+
 class Channel :
     def __init__(self, id:int, name:str, member_ids:list):
         self.id = id
@@ -45,10 +46,20 @@ class Message :
         self.channel = channel
         self.content = content
 
-
 class Server :
-    def __init__(self):
+    def __init__(self, users:list[User], channels:list[Channel], messages:list[Message]):
+        self.users = users
+        self.channels = channels
+        self.messages = messages
 
+def dico_to_user(user)->User:
+    return User(user['id'],user['name'])
+
+def dico_to_channel(channel)->Channel:
+    return Channel(channel['id'],channel['name'],channel['member_ids'])
+
+def dico_to_message(message)->Message:
+    return Message(message['id'],message['reception_date'],message['sender_id'],message['channel'],message['content'])
 
 def id_to_name(id,server):
     L = []
