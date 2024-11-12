@@ -26,14 +26,29 @@ def open_server(file_name):
     with open(file_name) as json.file :
         return json.load(json.file)
 
-# class Server :
-#     def __init__(self):
+class User :
+    def __init__(self, id:int, name:str):
+        self.id = id
+        self.name = name
+
+class Channel :
+    def __init__(self, id:int, name:str, member_ids:list):
+        self.id = id
+        self.name = name
+        self.member_ids = member_ids
+
+class Message :
+    def __init__(self, id:int, reception_date, sender_id:int, channel:int, content:str):
+        self.id = id
+        self.reception_date = reception_date
+        self.sender_id = sender_id
+        self.channel = channel
+        self.content = content
 
 
-# class User :
-#     def __init__(self, id:int, name:str):
-#         self.id = id
-#         self.name = name
+class Server :
+    def __init__(self):
+
 
 def id_to_name(id,server):
     L = []
