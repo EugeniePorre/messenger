@@ -20,10 +20,22 @@ import json
 #     ]
 # }
 
-fichier = open('server.json')
-server = json.load(fichier)
+file_name = 'server.json'
 
-def id_to_name(id):
+def open_server(file_name):
+    with open(file_name) as json.file :
+        return json.load(json.file)
+
+# class Server :
+#     def __init__(self):
+
+
+# class User :
+#     def __init__(self, id:int, name:str):
+#         self.id = id
+#         self.name = name
+
+def id_to_name(id,server):
     L = []
     for u in server['users']:
         if u['id'] == id:
@@ -34,7 +46,7 @@ def id_to_name(id):
         print("ERREUR : Plusieurs utilisateurs correspondent à l'identifiant",id,"demandé")
         return L
 
-def name_to_id(name):
+def name_to_id(name,server):
     L = []
     for u in server['users']:
         if u['name'] == name :
@@ -45,20 +57,20 @@ def name_to_id(name):
         print("ERREUR : Plusieurs id correspondent au nom",name,'demandé')
         return L
 
-def leave():
+def leave(server):
     print('Bye!')
     return None
 
-def see_users():
+def see_users(server):
     for u in server['users']:
         print(u['id'],".",u['name'])
 
-def see_channels():
+def see_channels(server):
     for c in server['channels']:
         print(c['id'],".",c['name'])
         print('    Users:')
         for id in c['member_ids']:
-            print('    -',id_to_name(id))
+            print('    -',id_to_name(id,server))
     print("Would you like to see some channel messages ?\nYes/No")
     choix = input('Select an option: ')
     if choix == 'Yes':
@@ -70,31 +82,31 @@ def see_channels():
         for m in M:
             print('************************************')
             print("Message id :",m['id'])
-            print("Message sent by",id_to_name(m['sender_id']),"at",m['reception_date'],":")
+            print("Message sent by",id_to_name(m['sender_id'],server),"at",m['reception_date'],":")
             print(m['content'])
             print('************************************')
     elif choix == 'No':
-        messenger()
+        messenger(file_name)
     else :
         print('Unknown option:', choix)
 
-def add_users():
+def add_users(server):
     print("Who would you like to add ?")
     new_users = input('Enter names separated by commas: ')
     L = new_users.split(',')
-    add_users_from_list(L)
+    add_users_from_list(L,server)
 
-def add_users_from_list(new_users):
+def add_users_from_list(new_users,server):
     cleaned_users = [nu.strip() for nu in new_users]
     first_unused_id = max(u['id'] for u in server['users']) + 1
     for i, new_name in enumerate(cleaned_users):
         new_user = {'id': first_unused_id + i, 'name': new_name}
         server['users'].append(new_user)
-    save()
+    save(server)
     print('User(s) added !')
-    see_users()
+    see_users(server)
 
-def add_channel():
+def add_channel(server):
     print("Which channel would you like to add ?")
     name = input('Enter channel name: ').strip()
     users = [u.strip() for u in input("Enter channel users's names -separated by commas:").split(',')]
@@ -103,14 +115,13 @@ def add_channel():
     for u in users :
         if u not in [v['name'] for v in server['users']] :
             L.append(u)
-    add_users_from_list(L)
-    Lusers = [name_to_id(name) for name in users]
+    add_users_from_list(L,server)
+    Lusers = [name_to_id(name,server) for name in users]
     channel_id = max([channel['id'] for channel in server['channels']]) + 1
     new_channel = {'id': channel_id, 'name': name, 'member_ids': Lusers}
     server['channels'].append(new_channel)
-    save()
-    see_channels()
-
+    save(server)
+    see_channels(server)
 
 ### 
 # Il faut aussi supprimer les messages du user
@@ -123,30 +134,26 @@ def add_channel():
 #             print("ERREUR : ",n,"is not an user")
 #         else :
 
-
-
-
-def save():
+def save(server):
     with open('server.json','w') as file :
         json.dump(server,file)
 
-def messenger():
+def messenger(file_name):
+    server = open_server(file_name)
     print('=== Messenger ===')
-    print('x. Leave\nA. See users\nB. See channels\nC. Add users\nD. Add channel\nE. Delete users')
+    print('x. Leave\nA. See users\nB. See channels\nC. Add users\nD. Add channel')
     choice = input('Select an option: ')
     if choice == 'x':
-        leave()
+        leave(server)
     elif choice == 'A':
-        see_users()
+        see_users(server)
     elif choice == 'B':
-        see_channels()
+        see_channels(server)
     elif choice == 'C':
-        add_users()
+        add_users(server)
     elif choice == 'D':
-        add_channel()
-    elif choice == 'E':
-        delete_users()
+        add_channel(server)
     else:
         print('Unknown option:', choice)
 
-messenger()
+messenger(file_name)
