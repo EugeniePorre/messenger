@@ -1,6 +1,9 @@
 from datetime import datetime
 import json
 
+#### PB : le JSON se supprime tout seul par moments ????
+
+
 # server = {
 #     'users': [
 #         {'id': 1, 'name': 'Alice'},
@@ -74,7 +77,7 @@ class Server :
     def server_to_dico(self)->dict:
         users = [User.user_to_dico(user) for user in self.users]
         channels = [Channel.channel_to_dico(channel) for channel in self.channels]
-        messages = [Messages.message_to_dico(message) for message in self.messages]
+        messages = [Message.message_to_dico(message) for message in self.messages]
         return {'users': users,'channels':channels,'messages':messages}
     @classmethod
     def dico_to_server(cls,server:dict)->'Server':
