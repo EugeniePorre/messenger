@@ -24,7 +24,11 @@ file_name = 'server.json'
 
 def open_server(file_name):
     with open(file_name) as json.file :
-        return json.load(json.file)
+        fichier = json.load(json.file)
+        users = [User.dico_to_user(user) for user in fichier['users']]
+        channels = [Channel.dico_to_channel(channel) for channel in fichier['channels']]
+        messages = [Message.dico_to_message(message) for message in fichier['messages']]
+        return Server(users,channels,messages)
 
 class User :
     def __init__(self, id:int, name:str):
@@ -66,14 +70,11 @@ class Server :
         self.channels = channels
         self.messages = messages
 
-def dico_to_server(server)->Server:
-    return Server(dico_to_user(server['users']),dico_to_channel(server['channels']),dico_to_message(server['messages']))
-
 def id_to_name(id,server):
     L = []
-    for u in server['users']:
-        if u['id'] == id:
-            L.append(u['name'])
+    for u in server.users:
+        if u.id == id:
+            L.append(u.name)
     if len(L) == 1:
         return L[0]
     else :
@@ -82,9 +83,9 @@ def id_to_name(id,server):
 
 def name_to_id(name,server):
     L = []
-    for u in server['users']:
-        if u['name'] == name :
-            L.append(u['id'])
+    for u in server.users:
+        if u.name == name :
+            L.append(u.id)
     if len(L) == 1 :
         return L[0]
     else :
@@ -96,28 +97,28 @@ def leave(server):
     return None
 
 def see_users(server):
-    for u in server['users']:
-        print(u['id'],".",u['name'])
+    for u in server.users:
+        print(u.id,".",u.name)
 
 def see_channels(server):
-    for c in server['channels']:
-        print(c['id'],".",c['name'])
+    for c in server.channels:
+        print(c.id,".",c.name)
         print('    Users:')
-        for id in c['member_ids']:
+        for id in c.member_ids:
             print('    -',id_to_name(id,server))
     print("Would you like to see some channel messages ?\nYes/No")
     choix = input('Select an option: ')
     if choix == 'Yes':
         group = input('Enter channel id: ')
-        CHANNELS = [c['id'] for c in server['channels']]
+        CHANNELS = [c.id for c in server.channels]
         if int(group) not in CHANNELS :
             print('Unknown option:', group)
-        M = [m for m in server['messages'] if m['channel'] == int(group)]
+        M = [m for m in server.messages if m.channel == int(group)]
         for m in M:
             print('************************************')
-            print("Message id :",m['id'])
-            print("Message sent by",id_to_name(m['sender_id'],server),"at",m['reception_date'],":")
-            print(m['content'])
+            print("Message id :",m.id)
+            print("Message sent by",id_to_name(m.sender_id,server),"at",m.reception_date,":")
+            print(m.content)
             print('************************************')
     elif choix == 'No':
         messenger(file_name)
@@ -132,10 +133,10 @@ def add_users(server):
 
 def add_users_from_list(new_users,server):
     cleaned_users = [nu.strip() for nu in new_users]
-    first_unused_id = max(u['id'] for u in server['users']) + 1
+    first_unused_id = max(u.id for u in server.users) + 1
     for i, new_name in enumerate(cleaned_users):
-        new_user = {'id': first_unused_id + i, 'name': new_name}
-        server['users'].append(new_user)
+        new_user = {'id': first_unused_id + i, 'name': new_name} ####### à vérifier pour le refactoring
+        server.users.append(new_user)
     save(server)
     print('User(s) added !')
     see_users(server)
@@ -147,13 +148,13 @@ def add_channel(server):
     n = len(users)
     L = []
     for u in users :
-        if u not in [v['name'] for v in server['users']] :
+        if u not in [v.name for v in server.users] :
             L.append(u)
     add_users_from_list(L,server)
     Lusers = [name_to_id(name,server) for name in users]
-    channel_id = max([channel['id'] for channel in server['channels']]) + 1
-    new_channel = {'id': channel_id, 'name': name, 'member_ids': Lusers}
-    server['channels'].append(new_channel)
+    channel_id = max([channel.id for channel in server.channels]) + 1
+    new_channel = {'id': channel_id, 'name': name, 'member_ids': Lusers} ####### à vérifier pour le refactoring
+    server.channels.append(new_channel)
     save(server)
     see_channels(server)
 
