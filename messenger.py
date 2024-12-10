@@ -30,13 +30,22 @@ class User :
     def __init__(self, id:int, name:str):
         self.id = id
         self.name = name
-
+    def __repr__(self)->str:
+        return f'User(id={self.id},name={self.name})'
+    @classmethod
+    def dico_to_user(cls,user)->'User':
+        return cls(user['id'],user['name'])
 
 class Channel :
     def __init__(self, id:int, name:str, member_ids:list):
         self.id = id
         self.name = name
         self.member_ids = member_ids
+    def __repr__(self)->str:
+        return f'Channel(id={self.id},name={self.name},member_ids={self.member_ids})'
+    @classmethod
+    def dico_to_channel(cls,channel)->'Channel':
+        return cls(channel['id'],channel['name'],channel['member_ids'])
 
 class Message :
     def __init__(self, id:int, reception_date, sender_id:int, channel:int, content:str):
@@ -45,6 +54,11 @@ class Message :
         self.sender_id = sender_id
         self.channel = channel
         self.content = content
+    def __repr__(self)->str:
+        return f'User(id={self.id},reception_date={self.reception_date},sender_id={self.sender_id},channel={self.channel},content={self.content})'
+    @classmethod
+    def dico_to_message(cls,message)->'Message':
+        return cls(message['id'],message['reception_date'],message['sender_id'],message['channel'],message['content'])
 
 class Server :
     def __init__(self, users:list[User], channels:list[Channel], messages:list[Message]):
@@ -52,14 +66,8 @@ class Server :
         self.channels = channels
         self.messages = messages
 
-def dico_to_user(user)->User:
-    return User(user['id'],user['name'])
-
-def dico_to_channel(channel)->Channel:
-    return Channel(channel['id'],channel['name'],channel['member_ids'])
-
-def dico_to_message(message)->Message:
-    return Message(message['id'],message['reception_date'],message['sender_id'],message['channel'],message['content'])
+def dico_to_server(server)->Server:
+    return Server(dico_to_user(server['users']),dico_to_channel(server['channels']),dico_to_message(server['messages']))
 
 def id_to_name(id,server):
     L = []
