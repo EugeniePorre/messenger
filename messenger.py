@@ -25,10 +25,10 @@ file_name = 'server.json'
 def open_server(file_name):
     with open(file_name) as json.file :
         fichier = json.load(json.file)
-        users = [User.dico_to_user(user) for user in fichier['users']]
-        channels = [Channel.dico_to_channel(channel) for channel in fichier['channels']]
-        messages = [Message.dico_to_message(message) for message in fichier['messages']]
-        return Server(users,channels,messages)
+    users = [User.dico_to_user(user) for user in fichier['users']]
+    channels = [Channel.dico_to_channel(channel) for channel in fichier['channels']]
+    messages = [Message.dico_to_message(message) for message in fichier['messages']]
+    return Server(users,channels,messages)
 
 class User :
     def __init__(self, id:int, name:str):
@@ -39,6 +39,8 @@ class User :
     @classmethod
     def dico_to_user(cls,user)->'User':
         return cls(user['id'],user['name'])
+    def user_to_dico(user:'User')->dict:
+        return {'id':user.id,'name':user.name}
 
 class Channel :
     def __init__(self, id:int, name:str, member_ids:list):
@@ -50,6 +52,8 @@ class Channel :
     @classmethod
     def dico_to_channel(cls,channel)->'Channel':
         return cls(channel['id'],channel['name'],channel['member_ids'])
+    def channel_to_dico(channel:'Channel')->dict:
+        return {'id':channel.id,'name':channel.name,'member_ids':channel.member_ids}
 
 class Message :
     def __init__(self, id:int, reception_date, sender_id:int, channel:int, content:str):
@@ -63,6 +67,8 @@ class Message :
     @classmethod
     def dico_to_message(cls,message)->'Message':
         return cls(message['id'],message['reception_date'],message['sender_id'],message['channel'],message['content'])
+    def message_to_dico(message:'Message')->dict:
+        return {'id':message.id,'reception_date':message.reception_date,'sender_id':message.sender_id,'channel':message.channel,'content':message.channel}
 
 class Server :
     def __init__(self, users:list[User], channels:list[Channel], messages:list[Message]):
@@ -135,7 +141,7 @@ def add_users_from_list(new_users,server):
     cleaned_users = [nu.strip() for nu in new_users]
     first_unused_id = max(u.id for u in server.users) + 1
     for i, new_name in enumerate(cleaned_users):
-        new_user = {'id': first_unused_id + i, 'name': new_name} ####### à vérifier pour le refactoring
+        new_user = dico_to_user({'id': first_unused_id + i, 'name': new_name})
         server.users.append(new_user)
     save(server)
     print('User(s) added !')
@@ -153,7 +159,7 @@ def add_channel(server):
     add_users_from_list(L,server)
     Lusers = [name_to_id(name,server) for name in users]
     channel_id = max([channel.id for channel in server.channels]) + 1
-    new_channel = {'id': channel_id, 'name': name, 'member_ids': Lusers} ####### à vérifier pour le refactoring
+    new_channel = dico_to_channel({'id': channel_id, 'name': name, 'member_ids': Lusers})
     server.channels.append(new_channel)
     save(server)
     see_channels(server)
