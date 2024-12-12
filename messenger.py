@@ -130,12 +130,15 @@ def see_channels(server):
         if int(group) not in CHANNELS :
             print('Unknown option:', group)
         M = [m for m in server.messages if m.channel == int(group)]
-        for m in M:
-            print('************************************')
-            print("Message id :",m.id)
-            print("Message sent by",id_to_name(m.sender_id,server),"at",m.reception_date,":")
-            print(m.content)
-            print('************************************')
+        if len(M) == 0 :
+            print("This channel don't have messages")
+        else :
+            for m in M:
+                print('************************************')
+                print("Message id :",m.id)
+                print("Message sent by",id_to_name(m.sender_id,server),"at",m.reception_date,":")
+                print(m.content)
+                print('************************************')
     elif choix == 'No':
         messenger(file_name)
     else :
