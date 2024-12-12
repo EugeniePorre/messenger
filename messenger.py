@@ -64,7 +64,7 @@ class Message :
     def __repr__(self)->str:
         return f'User(id={self.id},reception_date={self.reception_date},sender_id={self.sender_id},channel={self.channel},content={self.content})'
     def message_to_dico(self)->dict:
-        return {'id':self.id,'reception_date':self.reception_date,'sender_id':self.sender_id,'channel':self.channel,'content':self.channel}
+        return {'id':self.id,'reception_date':self.reception_date,'sender_id':self.sender_id,'channel':self.channel,'content':self.content}
     @classmethod
     def dico_to_message(cls,message:dict)->'Message':
         return cls(message['id'],message['reception_date'],message['sender_id'],message['channel'],message['content'])
