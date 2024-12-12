@@ -194,6 +194,7 @@ def save(server):
 
 def messenger(file_name):
     server = open_server(file_name)
+    print(server.users)
     print('=== Messenger ===')
     print('x. Leave\nA. See users\nB. See channels\nC. Add users\nD. Add channel')
     choice = input('Select an option: ')
