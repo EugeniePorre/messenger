@@ -5,9 +5,11 @@ import json
 
 import argparse
 parser=argparse.ArgumentParser(description="mise en entrée de paramètres json")
-parser.add_argument("--server-file", help="donne le chemin d'accès vers le fichier json")
-nom_fichier_json = parser.parse_args()
+parser.add_argument("--server", "-s", help="donne le chemin d'accès vers le fichier json")
+pars=parser.parse_args()
+nom_fichier_json=parser.server
 
+import json
 
 
 
