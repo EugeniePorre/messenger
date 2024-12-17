@@ -8,9 +8,10 @@ commit_message = ''
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-m')
+parser.add_argument('-s','--server')
+parser.add_argument('-u','--url')
 
 args =  parser.parse_args()
 
-print('ArgumentParser a parsé le paramètre suivant:',args.m)
-commit_message = args.m
+print('Le chemin du fichier est :',args.server)
+commit_message = args.server
