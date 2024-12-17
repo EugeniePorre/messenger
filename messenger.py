@@ -1,5 +1,20 @@
 from datetime import datetime
 import json
+# ajout ligne parser 
+
+
+import argparse
+parser=argparse.ArgumentParser(description="mise en entrée de paramètres json")
+parser.add_argument("--server", "-s", help="donne le chemin d'accès vers le fichier json")
+pars=parser.parse_args()
+nom_fichier_json=parser.server
+
+import json
+#ajout commentaire pour test christelle
+
+
+
+
 
 #### PB : le JSON se supprime tout seul par moments ????
 
