@@ -1,3 +1,8 @@
+import json
+
+from model import User
+from model import Channel
+from server import Server
 
 class Client :
     def __init__(self, server:Server):
@@ -57,7 +62,7 @@ class Client :
                     print(m.content)
                     print('************************************')
         elif choix == 'No':
-            Client.messenger(file_name)
+            Client.messenger(self)
         else :
             print('Unknown option:', choix)
 
