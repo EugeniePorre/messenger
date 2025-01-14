@@ -35,7 +35,7 @@ class Client :
         return None
     
     def see_users(self):
-        for u in self.server.users:
+        for u in self.server.get_users():
             print(u.id,".",u.name)
 
     def see_channels(self):
@@ -104,7 +104,7 @@ class Client :
 
     def messenger(self):
         #server = open_server(file_name)
-        print(self.server.users)
+        print(self.server.get_users())
         print('=== Messenger ===')
         print('x. Leave\nA. See users\nB. See channels\nC. Add users\nD. Add channel')
         choice = input('Select an option: ')
