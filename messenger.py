@@ -16,7 +16,6 @@ class Remoteserver :
         self.url = url
     def getserver(self):
 
-
 #Client.messenger()
 
 # server = {

@@ -1,3 +1,7 @@
+from model import User
+from model import Channel
+from model import Message
+
 class Server :
     def __init__(self, users:list[User], channels:list[Channel], messages:list[Message]):
         self.users = users
