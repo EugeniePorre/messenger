@@ -21,7 +21,8 @@ class Channel :
         return {'id':self.id,'name':self.name,'member_ids':self.member_ids}
     @classmethod
     def dico_to_channel(cls,channel:dict)->'Channel':
-        return cls(channel['id'],channel['name'],channel['member_ids'])
+        return cls(channel['id'],channel['name'])
+                   #,channel['member_ids'])
 
 class Message :
     def __init__(self, id:int, reception_date, sender_id:int, channel:int, content:str):
