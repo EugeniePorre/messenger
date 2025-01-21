@@ -5,11 +5,14 @@ from model import Channel
 from model import Message
 from server import Server
 
+# impossible d'ajouter les @override (version de python incompatible)
+
 class LocalServer(Server) :
     def __init__(self, file:str):
         self.file = file
         self.server = self
         self._users : list[User] = []
+        self._channels : list[Channel] = []
     
     def load(self):
         server = json.load(open(self.file, encoding = 'utf8'))
@@ -17,8 +20,11 @@ class LocalServer(Server) :
         self._channels = [Channel.dico_to_channel(channel) for channel in server['channels']]
         self._messages = [Message.dico_to_message(message) for message in server['messages']]
     
-    def get_users(self):
+    def get_users(self)->list[User]:
         return self._users
+    
+    def get_channels(self)->list[Channel]:
+        return self._channels
     
     def create_users(self,new_user:dict):
         new_user = User.dico_to_user(new_user)
