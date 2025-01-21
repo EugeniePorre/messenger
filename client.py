@@ -39,16 +39,16 @@ class Client :
             print(u.id,".",u.name)
 
     def see_channels(self):
-        for c in self.server.channels:
+        for c in self.server.get_channels():
             print(c.id,".",c.name)
             print('    Users:')
             for id in c.member_ids:
-                print('    -',Client.id_to_name(self,id))
+                print('    -', Client.id_to_name(self,id))
         print("Would you like to see some channel messages ?\nYes/No")
         choix = input('Select an option: ')
         if choix == 'Yes':
             group = input('Enter channel id: ')
-            CHANNELS = [c.id for c in self.server.channels]
+            CHANNELS = [c.id for c in self.server.get_channels()]
             if int(group) not in CHANNELS :
                 print('Unknown option:', group)
             M = [m for m in self.server.messages if m.channel == int(group)]
