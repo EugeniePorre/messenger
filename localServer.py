@@ -12,13 +12,17 @@ class LocalServer(Server) :
         self._users : list[User] = []
     
     def load(self):
-        server = json.load(open(self.file))
+        server = json.load(open(self.file, encoding = 'utf8'))
         self._users = [User.dico_to_user(user) for user in server['users']]
         self._channels = [Channel.dico_to_channel(channel) for channel in server['channels']]
         self._messages = [Message.dico_to_message(message) for message in server['messages']]
     
     def get_users(self):
         return self._users
+    
+    def create_users(self,new_user:dict):
+        new_user = User.dico_to_user(new_user)
+        self.server.users.append(new_user)
         
     def server_to_dico(self)->dict:
         users = [User.user_to_dico(user) for user in self.users]
