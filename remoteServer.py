@@ -4,6 +4,7 @@ from model import User
 from model import Channel
 from model import Message
 from server import Server
+from client import Client
 
 class RemoteServer(Server) :
     def __init__(self, url:str):
@@ -18,5 +19,8 @@ class RemoteServer(Server) :
         Users = response.json()
         return [User.dico_to_user(user) for user in Users]
     
-    def create_user(self):
-        pass
+    def create_user(self,new_user:dict):
+        requests.post('https://groupe5-python-mines.fr/users/create',json = new_user)
+        
+
+        
