@@ -74,10 +74,10 @@ class Client :
 
     def add_users_from_list(self,new_users):
         cleaned_users = [nu.strip() for nu in new_users]
-        first_unused_id = max(u.id for u in self.server.users) + 1
+        first_unused_id = max(u.id for u in self.server.get_users()) + 1
         for i, new_name in enumerate(cleaned_users):
-            new_user = User.dico_to_user({'id': first_unused_id + i, 'name': new_name})
-            self.server.users.append(new_user)
+            new_user = {'id': first_unused_id + i, 'name': new_name}
+            self.server.create_user(new_user)
         Client.save(self)
         print('User(s) added !')
         Client.see_users(self)
@@ -99,7 +99,7 @@ class Client :
         Client.see_channels(self)
 
     def save(self):
-        with open('server.json','w') as file :
+        with open('server.json','w',encoding = 'utf8') as file :
             json.dump(Server.server_to_dico(self.server),file)
 
     def messenger(self):
