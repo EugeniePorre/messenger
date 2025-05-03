@@ -12,6 +12,8 @@ arguments = argument_parser.parse_args()
 server : Server
 if arguments.file is not None :
     server = LocalServer(arguments.file)
+    server.load() # Vous pouvez faire cet appel ici car il n'est
+                  # pas utile pour les RemoteServer
 elif arguments.url is not None :
     server = RemoteServer(arguments.url)
 else :
@@ -25,6 +27,5 @@ file_name = 'server.json'
 #         self.url = url
 #     def getserver(self):
 
-server.load()
 client = Client(server)
 client.messenger()
